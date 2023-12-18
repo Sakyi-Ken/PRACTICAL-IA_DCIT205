@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 const patientsRouter = require('./routes/patients');
 const encountersRouter = require('./routes/encounters');
+const nurseRouter = require('./routes/nurse');
 const { Patient, Encounter } = require('./models/models');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use('/patients', patientsRouter);
 app.use('/api/encounters', encountersRouter);
+app.use('/nurse', nurseRouter); // Add nurse-related routes
 
 const PORT = 3000;
 app.listen(PORT, () => {
