@@ -1,15 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+const morgan = require('morgan');
 
-const patientsRouter = require('./routes/patients');
-const encountersRouter = require('./routes/encounters');
-const nurseRouter = require('./routes/nurse');
-const { Patient, Encounter } = require('./models/models');
+const patientsRouter = require('./src/routes/patients.route');
+// const encountersRouter = require('./src/routes/encounters.route');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/medical_records_db')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected successfully');
   })
@@ -19,11 +19,11 @@ mongoose.connect('mongodb://localhost/medical_records_db')
 
 app.use(bodyParser.json());
 
-app.use('/patients', patientsRouter);
-app.use('/api/encounters', encountersRouter);
-app.use('/nurse', nurseRouter); // Add nurse-related routes
+app.use(morgan('dev')); // Logging middleware
 
-const PORT = 3000;
+app.use('/api/v1', patientsRouter);
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is humming on port ${PORT}`);
 });
